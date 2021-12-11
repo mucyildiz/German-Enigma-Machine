@@ -65,7 +65,7 @@ def enigma_encryption(message, left_rotor, middle_rotor, right_rotor, plugboard,
         if right_rotor_shift_count % 26 == 0:
             middle_rotor.rotate_rotor()
             
-        if right_rotor_shift_count % 26 ** 2 == 0:
+        if right_rotor_shift_count % (26 ** 2) == 0:
             left_rotor.rotate_rotor()
 
         right_offset = right_rotor.offset_tracker
@@ -160,10 +160,13 @@ def main():
     plugboard = input("Input the five pairs of letters you would like to connect in the plugboard. E.G. AB CD EF GH IJ\n")
 
     message = input("Input message.")
+    message = message.upper()
+    message = ''.join(message.split())
     print(enigma_encryption(message, left_rotor, middle_rotor, right_rotor, plugboard, reflector))
 
 
-main()
+if __name__ == "__main__":
+    main()
 
 
 
