@@ -50,7 +50,7 @@ def shift_keyboard(ring_setting):
     return shifted_keyboard
 
 
-def enigma_encryption(message, left_rotor, middle_rotor, right_rotor, plugboard, reflector):
+def enigma_encrypt(message, left_rotor, middle_rotor, right_rotor, plugboard, reflector):
 
     encrypted_message = ''
     
@@ -119,15 +119,15 @@ def enigma_encryption(message, left_rotor, middle_rotor, right_rotor, plugboard,
 
 
 @click.command()
-@click.option('--message', prompt='Enter message to encrypt (No spaces allowed for historic accuracy): ', help='Enter message to encrypt: ')
-@click.option('--plugboard', prompt='Enter plugboard (5 pairs of letters eg AB CD ...): ', help='Enter plugboard: ')
-@click.option('--reflector', prompt='Enter reflector (A through C): ', help='Enter reflector: ')
-@click.option('--left_rotor', prompt='Enter left rotor index (1 through 5): ', help='Enter left rotor: ')
-@click.option('--middle_rotor', prompt='Enter middle rotor index (1 through 5): ', help='Enter middle rotor: ')
-@click.option('--right_rotor', prompt='Enter right rotor index (1 through 5): ', help='Enter right rotor: ')
-@click.option('--left_start_letter', prompt='Enter left rotor start index (A through Z): ', help='Enter left rotor start letter: ', default='A')
-@click.option('--middle_start_letter', prompt='Enter middle rotor start index (A through Z): ', help='Enter middle rotor start letter: ', default='A')
-@click.option('--right_start_letter', prompt='Enter right rotor start index (A through Z): ', help='Enter right rotor start letter: ', default='A')
+@click.option('--message', prompt='Enter message to encrypt (No spaces allowed for historic accuracy): ', help='Message to encrypt')
+@click.option('--plugboard', prompt='Enter plugboard (5 pairs of letters eg AB CD ...): ', help='Plugboard (5 pairs of letters e.g. AB CD ...)')
+@click.option('--reflector', prompt='Enter reflector (A through C): ', help='Reflector (A through C)')
+@click.option('--left_rotor', prompt='Enter left rotor index (1 through 5): ', help='Left rotor index (1 through 5)')
+@click.option('--middle_rotor', prompt='Enter middle rotor index (1 through 5): ', help='Middle rotor index (1 through 5)')
+@click.option('--right_rotor', prompt='Enter right rotor index (1 through 5): ', help='Right rotor index (1 through 5)')
+@click.option('--left_start_letter', prompt='Enter left rotor start letter (A through Z): ', help='Left rotor starting letter (A through Z)', default='A')
+@click.option('--middle_start_letter', prompt='Enter middle rotor start letter (A through Z): ', help='Middle rotor starting letter (A through Z)', default='A')
+@click.option('--right_start_letter', prompt='Enter right rotor start letter (A through Z): ', help='Right rotor starting letter (A through Z)', default='A')
 def main(message, plugboard, reflector, left_rotor, middle_rotor, right_rotor, left_start_letter, middle_start_letter, right_start_letter):
 
     keyboard = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -159,7 +159,9 @@ def main(message, plugboard, reflector, left_rotor, middle_rotor, right_rotor, l
 
     message = message.upper()
     message = ''.join(message.split())
-    print(enigma_encryption(message, left_rotor, middle_rotor, right_rotor, plugboard, reflector))
+    encrypted_message = enigma_encrypt(message, left_rotor, middle_rotor, right_rotor, plugboard, reflector)
+    print(encrypted_message)
+    return encrypted_message
 
 
 if __name__ == "__main__":
