@@ -1,3 +1,5 @@
+import click
+
 class Rotor:
     
     def __init__(self, rotor, offset_tracker):
@@ -7,7 +9,7 @@ class Rotor:
     def __str__(self):
         return self.rotor
     
-    def set_start_position(self, index):
+    def set_start_position(self, index=0):
         self.rotor = self.rotor[index:] + self.rotor[:index]
         return self.rotor
 
@@ -116,8 +118,17 @@ def enigma_encryption(message, left_rotor, middle_rotor, right_rotor, plugboard,
     return encrypted_message
 
 
-
-def main():
+@click.command()
+@click.option('--message', prompt='Enter message to encrypt (No spaces allowed for historic accuracy): ', help='Enter message to encrypt: ')
+@click.option('--plugboard', prompt='Enter plugboard (5 pairs of letters eg AB CD ...): ', help='Enter plugboard: ')
+@click.option('--reflector', prompt='Enter reflector (A through C): ', help='Enter reflector: ')
+@click.option('--left_rotor', prompt='Enter left rotor index (1 through 5): ', help='Enter left rotor: ')
+@click.option('--middle_rotor', prompt='Enter middle rotor index (1 through 5): ', help='Enter middle rotor: ')
+@click.option('--right_rotor', prompt='Enter right rotor index (1 through 5): ', help='Enter right rotor: ')
+@click.option('--left_start_letter', prompt='Enter left rotor start index (A through Z): ', help='Enter left rotor start letter: ', default='A')
+@click.option('--middle_start_letter', prompt='Enter middle rotor start index (A through Z): ', help='Enter middle rotor start letter: ', default='A')
+@click.option('--right_start_letter', prompt='Enter right rotor start index (A through Z): ', help='Enter right rotor start letter: ', default='A')
+def main(message, plugboard, reflector, left_rotor, middle_rotor, right_rotor, left_start_letter, middle_start_letter, right_start_letter):
 
     keyboard = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -132,34 +143,20 @@ def main():
     'FVPJIAOYEDRZXWGCTKUQSBNMHL'    
     ]
 
-    rotor1_inquiry = int(input("Which rotor will go into the rightmost position? Press 1 for Rotor I, 2 for Rotor II, and so on."))
-    rightmost_rotor = rotors[rotor1_inquiry - 1]
+    right_rotor = rotors[int(right_rotor) - 1]
+    middle_rotor = rotors[int(middle_rotor) - 1]
+    left_rotor = rotors[int(left_rotor) - 1]
 
-    rotor2_inquiry = int(input("Which rotor is going into the middle position?"))
-    midd_rotor = rotors[rotor2_inquiry - 1]
+    right_rotor = Rotor(right_rotor, keyboard)
+    middle_rotor = Rotor(middle_rotor, keyboard)
+    left_rotor = Rotor(left_rotor, keyboard)
 
-    rotor3_inquity = int(input("Which rotor is going into the left postion?"))
-    leftmost_rotor = rotors[rotor3_inquity - 1]
+    right_rotor.set_start_position(keyboard.index(right_start_letter))
+    middle_rotor.set_start_position(keyboard.index(middle_start_letter))
+    left_rotor.set_start_position(keyboard.index(left_start_letter))
 
-    right_rotor = Rotor(rightmost_rotor, keyboard)
-    middle_rotor = Rotor(midd_rotor, keyboard)
-    left_rotor = Rotor(leftmost_rotor, keyboard)
+    reflector = reflectors[keyboard.index(reflector)]
 
-    starting_position_right = input("What is the position of the rightmost rotor? Type a letter between A and Z.")
-    right_rotor.set_start_position(keyboard.index(starting_position_right))
-
-    starting_position_mid = input("What is the starting position of the middle rotor?")
-    middle_rotor.set_start_position(keyboard.index(starting_position_mid))
-
-    starting_position_left = input("what is the starting position of the left rotor?")
-    left_rotor.set_start_position(keyboard.index(starting_position_left))
-
-    reflector_inquiry = input("Which reflector would you like to use? Type A for reflector A and so on. We have reflectors A-C.")
-    reflector = reflectors[keyboard.index(reflector_inquiry)]
-
-    plugboard = input("Input the five pairs of letters you would like to connect in the plugboard. E.G. AB CD EF GH IJ\n")
-
-    message = input("Input message.")
     message = message.upper()
     message = ''.join(message.split())
     print(enigma_encryption(message, left_rotor, middle_rotor, right_rotor, plugboard, reflector))
